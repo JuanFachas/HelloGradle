@@ -1,28 +1,27 @@
-echo 'pipeline {
+pipeline {
     agent any
+
     stages {
-        stage("Checkout") {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage("Build") {
+
+        stage('Run Hello World') {
             steps {
-                sh "./gradlew clean build"
-            }
-        }
-        stage("Run") {
-            steps {
-                sh "java -jar build/libs/*.jar || true"
+                sh 'javac src/main/java/Main.java'
+                sh 'java -cp src/main/java Main'
             }
         }
     }
+
     post {
         success {
-            echo "✅ Gradle Hello World ejecutado con éxito."
+            echo '✅ Hello World ejecutado desde Jenkins.'
         }
         failure {
-            echo "❌ Algo falló al ejecutar el Hello World con Gradle."
+            echo '❌ Falló la ejecución de Hello World.'
         }
     }
-}' > Jenkinsfile
+}
